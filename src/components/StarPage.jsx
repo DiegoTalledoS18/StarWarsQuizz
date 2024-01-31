@@ -1,13 +1,10 @@
 import {Box, Button, styled, Typography} from "@mui/material";
-import {useStore} from "zustand";
-import { useCounterStore } from "../store/questions.js";
 import {NavLink} from "react-router-dom";
 
 export default function StarPage(){
     const Img= styled("img")({
         width: 200,
     })
-    const { count, increment } = useCounterStore();
     return (
         <>
             <Box sx={{display:"block"}}>
@@ -16,14 +13,8 @@ export default function StarPage(){
             </Box>
             <Button variant="outlined" sx={{ color: '#F2BC02', border: '1px solid #F2BC02', mt:2}}
                     component={NavLink}
-                    to="/quiz"
-            >
-                START
-            </Button>
-            <p>{count}</p>
-            <Button variant="outlined" sx={{ color: '#F2BC02', border: '1px solid #F2BC02', mt: 2 }} onClick={increment}>
-                Incrementar
-            </Button>
+                    to="/question/1"
+            >START</Button>
 
         </>
     )

@@ -37,21 +37,28 @@ export default function QuestionPage() {
     }, [questionId]);
 
     const evaluateAnswer = (index) => {
-        setAnswer(index);
+        if(question.userSelectedAnswer === undefined){
+            setAnswer(index);
 
-        setQuestion(prevQuestion => {
-            const updatedQuestion = { ...prevQuestion };
+            setQuestion(prevQuestion => {
+                const updatedQuestion = { ...prevQuestion };
 
-            updatedQuestion.userSelectedAnswer = index;
-            updatedQuestion.isCorrect = index === updatedQuestion.answer;
+                updatedQuestion.userSelectedAnswer = index;
+                updatedQuestion.isCorrect = index === updatedQuestion.answer;
 
-            return updatedQuestion;
-        });
+                return updatedQuestion;
+            });
+        }else {
+            return 0
+        }
+
     }
     const getNextPage=()=>{
-        useQuestionStore.getState().addQuestion(question)
-        let pageId=parseInt(questionId)+1
-        navigate("/question/"+pageId);
+        if(question.userSelectedAnswer !== undefined){
+            useQuestionStore.getState().addQuestion(question)
+            let pageId=parseInt(questionId)+1
+            navigate("/question/"+pageId);
+        }
     }
     const getButtonColor = (index,font) => {
         if (question.userSelectedAnswer !== undefined) {
@@ -90,6 +97,7 @@ export default function QuestionPage() {
                         key={index}
                         variant="outlined"
                         sx={{
+                            cursor: (question.userSelectedAnswer === undefined) ? "pointer" : "default",
                             color: getButtonColor(index,true),
                             border: `1px ${getButtonColor(index,false)} solid`,
                             backgroundColor: getButtonColor(index,false),
@@ -101,15 +109,11 @@ export default function QuestionPage() {
                     </Button>
                 ))}
             </Box>
-            <Box sx={{display:"flex",justifyContent:"space-between"}}>
-                <Button variant="outlined" sx={{ color: '#FFFF', border: '1px solid #FFFF', mt:2}}
-                        component={NavLink}
-                        to={ getLastPage()  }
-                >BACK</Button>
-                <Button variant="outlined" sx={{ color: '#F2BC02', border: '1px solid #F2BC02', mt:2}}
-                        onClick={ ()=>getNextPage()}
-                >NEXT</Button>
-
+            <Box sx={{display:"flex",justifyContent:"space-between",width:"100%"}}>
+                <Button variant="contained"
+                        sx={{mt:2,width:"100%"}}
+                        disabled={question.userSelectedAnswer === undefined}
+                        onClick={ ()=>getNextPage()}>SIGUIENTE</Button>
             </Box>
         </>
     );

@@ -14,7 +14,7 @@ export default function StarPage(){
             <Button variant="outlined" sx={{ color: '#F2BC02', border: '1px solid #F2BC02', mt:2}}
                     component={NavLink}
                     to="/question/1"
-            >START</Button>
+            >EMPEZAR</Button>
 
         </>
     )

@@ -35,6 +35,15 @@ export default function StarPage(){
             window.removeEventListener("mousemove", handleMouseMove);
         };
     }, []);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     const calculateBackgroundBlur = (xPosition, windowWidth) => {
         const distanceFromCenter = Math.abs(xPosition - windowWidth / 2);
@@ -65,6 +74,24 @@ export default function StarPage(){
         const blurValue = blurFactor * maxBlur;
         return `${blurValue}px`;
     };
+    const calculateLogoWidth = (windowWidth) => {
+        if (windowWidth < 442) {
+            return "200px";
+        } else if (windowWidth < 1100) {
+            return "400px";
+        } else {
+            return "569px";
+        }
+    };
+    const calculatePhraseVariant = (windowWidth) => {
+        if (windowWidth < 442) {
+            return "h6";
+        } else if (windowWidth < 1100) {
+            return "h5";
+        } else {
+            return "h4";
+        }
+    };
 
     const Img= styled("img")({
     })
@@ -78,7 +105,7 @@ export default function StarPage(){
                         width: "100%",
                         height: "100%",
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr 1fr", // Define tres columnas de igual tamaño
+                        gridTemplateColumns: ` ${(windowWidth<850) ? "1fr": "1fr 1fr 1fr"}`, // Define tres columnas de igual tamaño
                     }}
                     globalFactorX={0.3}
                     globalFactorY={0.3}
@@ -95,7 +122,7 @@ export default function StarPage(){
                             width: "100%",
                             height: "100%",
                             backfaceVisibility: "hidden",
-                            filter: `blur(${calculateBackgroundBlur(mousePosition.x, window.innerWidth)})` // Aplica el filtro de desenfoque dinámico
+                            filter: `blur(${calculateBackgroundBlur(mousePosition.x, window.innerWidth)})`
                         }}
                     />
                     <MouseParallaxChild
@@ -110,7 +137,7 @@ export default function StarPage(){
 
                         }}
                     >
-                        <Img src={SD_L} style={{width:"100px"}} alt="Star Wars Logo"></Img>
+                        <Img src={SD_L} style={{width:"100px", marginTop:"1rem"}} alt="Star Wars Logo"></Img>
                     </MouseParallaxChild>
                     <MouseParallaxChild
                         factorX={-0.01}
@@ -132,12 +159,12 @@ export default function StarPage(){
                             mt: 5,
                             mb: 5
                         }}>
-                            <img src={SWLogo} alt="Star Wars Logo"></img>
-                            <Typography variant="h4" component="h1" sx={{ color: "#ffffff", mt: 1 }}>MAY THE FORCE BE WITH YOU</Typography>
-                            <Typography variant="h5" component="h3" sx={{ color: "#FFFFFF", mt: 1 }}>By Diego Talledo S.</Typography>
+                            <Img src={SWLogo} style={{ width: calculateLogoWidth(windowWidth) }} alt="Star Wars Logo" />
+                            <Typography variant={calculatePhraseVariant(windowWidth)} component="h1" sx={{ color: "#ffffff", mt: 1 , textAlign: "center"}}>MAY THE FORCE BE WITH YOU</Typography>
+                            <Typography variant={windowWidth<1100 ? "h6": "h5"} sx={{ color: "#FFFFFF", mt: 1, textAlign: "center" }}>By Diego Talledo S.</Typography>
                             <Button variant="outlined" sx={{ color: '#ffec00', border: '1px solid #ffec00', mt: 2 }}
                                     component={NavLink}
-                                    to="/question/1">EMPEZAR</Button>
+                                    to="/question/1">INICIAR</Button>
                         </Box>
                     </MouseParallaxChild>
                     <MouseParallaxChild
@@ -152,7 +179,7 @@ export default function StarPage(){
 
                         }}
                     >
-                        <Img src={SD_R} style={{width:"300px"}} alt="Star Wars Logo"></Img></MouseParallaxChild>
+                        <Img src={SD_R} style={{width:`${(windowWidth<1400) ? "200px": "300px"}`, marginBottom:"1rem"}} alt="Star Wars Logo"></Img></MouseParallaxChild>
                 </MouseParallaxContainer>
             </Grid>
 

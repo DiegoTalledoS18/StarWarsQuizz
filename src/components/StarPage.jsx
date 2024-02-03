@@ -46,7 +46,7 @@ export default function StarPage(){
 
     const calculateBlur = (yPosition, windowHeight) => {
         const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
-        const maxBlur = 1.5;
+        const maxBlur = 1;
         const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
         const blurValue = blurFactor * maxBlur;
         return `${blurValue}px`;
@@ -128,7 +128,9 @@ export default function StarPage(){
                             width: "100%",
                             display: "flex",
                             flexDirection: "column",
-                            alignItems: "center"
+                            alignItems: "center",
+                            mt: 5,
+                            mb: 5
                         }}>
                             <img src={SWLogo} alt="Star Wars Logo"></img>
                             <Typography variant="h4" component="h1" sx={{ color: "#ffffff", mt: 1 }}>MAY THE FORCE BE WITH YOU</Typography>

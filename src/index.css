@@ -24,14 +24,3 @@ a:hover {
   color: #ffffff; /* Cambiar el color al mismo tono de fondo para iluminar */
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.8); /* Agregar sombra de texto para iluminar */
 }
-
-button {
-  border-radius: 8px;
-  border: 1px solid #ffec00;
-  transition: box-shadow 0.3s; /* Agregar transición suave para el efecto de iluminación */
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}

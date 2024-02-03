@@ -103,23 +103,29 @@ export default function QuestionPage() {
             navigate("/question/"+pageId);
         }
     }
-    const getButtonColor = (index,font) => {
-        if (question.userSelectedAnswer !== undefined) {
-            if (index === question.userSelectedAnswer) {
-                if(font===true){
-                    return '#FFFF'
-                }
-                if(question.userSelectedAnswer === question.answer){
-                    return 'rgba(0, 255, 0, 0.5)'
-                }else {
-                    return 'rgba(255, 0, 0, 0.5)'
+    const getButtonColor = (index,font,windowHeight,background) => {
+        if(background && windowHeight<=1050 && question.userSelectedAnswer === undefined){
+            return 'rgba(0,0,0,0.5)'
+        }
+        else {
+            if (question.userSelectedAnswer !== undefined) {
+                if (index === question.userSelectedAnswer) {
+                    if(font===true){
+                        return '#FFFF'
+                    }
+                    if(question.userSelectedAnswer === question.answer){
+                        return 'rgba(0, 255, 0, 0.5)'
+                    }else {
+                        return 'rgba(255, 0, 0, 0.5)'
+                    }
+                } else {
+                    return '';
                 }
             } else {
                 return '';
             }
-        } else {
-            return '';
         }
+
 
     }
     const calculateBlur = (yPosition, windowHeight) => {
@@ -130,11 +136,20 @@ export default function QuestionPage() {
         return `${blurValue}px`;
     };
     const calculateLeftBlur = (yPosition, windowHeight) => {
-        const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
+        const distanceFromCenter = Math.abs(yPosition - windowHeight / 6);
         const maxBlur = 1.5;
         const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
         const blurValue = blurFactor * maxBlur;
         return `${blurValue}px`;
+    };
+    const calculatePhraseVariant = (windowWidth) => {
+        if (windowWidth < 660) {
+            return "h6";
+        } else if (windowWidth < 970) {
+            return "h5";
+        } else {
+            return "h4";
+        }
     };
     const calculateRightBlur = (yPosition, windowHeight) => {
         const distanceFromCenter = Math.abs(yPosition - windowHeight +400);
@@ -173,20 +188,27 @@ export default function QuestionPage() {
                         factorX={0.055}
                         factorY={0.1}
                         style={{
+                            display: `${(window.innerWidth<=500) ? "none": "block"}`,
                             backgroundImage: `url(${TwoSuns})`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundPositionX: "left",
+                            backgroundPositionY: "top",
                             position: "absolute",
-                            width: "411px",
-                            height: "289px",
+                            transform: `scale(1)`,
+                            width: "100%",
+                            height: "100%",
+                            filter: `blur(${calculateLeftBlur(mousePosition.x, window.innerWidth)})`
                         }}
                     />
                     <MouseParallaxChild
                         factorX={0.055}
                         factorY={0.1}
                         style={{
+                            display: `${(window.innerWidth<=500) ? "none": "block"}`,
                             backgroundImage: `url(${Tatooine})`,
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "calc(90%) center", // 100px a la izquierda del borde derecho y centrado verticalmente
-                            transform: "scale(1)",
+                            transform: `scale(1)`,
                             position: "absolute",
                             width: "100%",
                             height: "100%",
@@ -256,7 +278,10 @@ export default function QuestionPage() {
                             alignItems: "center",
                             justifyContent: "center"
                         }}>
-                            <Typography variant="h4" component="h2" sx={{
+                            <Typography variant={calculatePhraseVariant(windowWidth)} component="h2" sx={{
+                                ml:1,
+                                mr:1,
+                                textAlign: "center",
                                 color:"white",
                                 display:`${(question.id===0)?"none":"block"}`
                             }}>{questionId}. {question.question}</Typography>
@@ -267,12 +292,12 @@ export default function QuestionPage() {
                                         variant="outlined"
                                         sx={{
                                             cursor: (question.userSelectedAnswer === undefined) ? "pointer" : "default",
-                                            color: getButtonColor(index,true),
-                                            border: `1px ${getButtonColor(index,false)} solid`,
-                                            backgroundColor: getButtonColor(index,false),
+                                            color: getButtonColor(index,true,windowWidth,false),
+                                            border: `1px ${getButtonColor(index,false,false)} solid`,
+                                            backgroundColor: getButtonColor(index,false,windowWidth,true),
                                             mt: 2,
                                             "&:hover": {
-                                                backgroundColor: getButtonColor(index,false),
+                                                backgroundColor: getButtonColor(index,false,windowWidth,true),
                                             },
                                         }}
                                         onClick={() => evaluateAnswer(index)}

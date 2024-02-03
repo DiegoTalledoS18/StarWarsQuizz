@@ -55,7 +55,7 @@ export default function StarPage(){
 
     const calculateBlur = (yPosition, windowHeight) => {
         const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
-        const maxBlur = 1;
+        const maxBlur = 1.2;
         const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
         const blurValue = blurFactor * maxBlur;
         return `${blurValue}px`;

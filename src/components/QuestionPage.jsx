@@ -1,6 +1,6 @@
 import {NavLink, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import {Box, Button, Grid, Typography} from "@mui/material";
+import {Box, Button, Grid, styled, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {createQuestion} from "../store/question.d.js"
 import {useQuestionStore} from "../store/questions.js";
@@ -12,6 +12,7 @@ import SDOT from "../assets/SDOT.png";
 import TwoSuns from "../assets/two_suns.png";
 import {makeStyles} from "@material-ui/core/styles";
 import StarsBackground from "../assets/stars.png";
+import SD_L from "../assets/sd_1.png";
 
 const useStyles = makeStyles({
     root: {
@@ -32,7 +33,8 @@ export default function QuestionPage() {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [answer, setAnswer] = useState(undefined);
     const [question, setQuestion] = useState(createQuestion);
-
+    const Img= styled("img")({
+    })
     const handleMouseMove = (event) => {
         setMousePosition({ x: event.clientX, y: event.clientY });
     };
@@ -172,13 +174,9 @@ export default function QuestionPage() {
                         factorY={0.1}
                         style={{
                             backgroundImage: `url(${TwoSuns})`,
-                            backgroundPositionY: "10%",
-                            backgroundPositionX: "-1000%",
-                            transform: "scale(1)",
                             position: "absolute",
-                            width: "100%",
-                            height: "100%",
-                            backfaceVisibility: "hidden"
+                            width: "411px",
+                            height: "289px",
                         }}
                     />
                     <MouseParallaxChild
@@ -186,8 +184,8 @@ export default function QuestionPage() {
                         factorY={0.1}
                         style={{
                             backgroundImage: `url(${Tatooine})`,
-                            backgroundPositionY: "60%",
-                            backgroundPositionX: "-1000%",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "calc(90%) center", // 100px a la izquierda del borde derecho y centrado verticalmente
                             transform: "scale(1)",
                             position: "absolute",
                             width: "100%",
@@ -200,8 +198,8 @@ export default function QuestionPage() {
                         factorY={0.08}
                         style={{
                             backgroundImage: `url(${Asteroids})`,
-                            backgroundPositionY: "60%",
-                            backgroundPositionX: "-1000%",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "calc(99.5%) calc(61%)", // 100px hacia abajo del borde superior y centrado horizontalmente
                             transform: "scale(1)",
                             position: "absolute",
                             width: "100%",
@@ -214,8 +212,8 @@ export default function QuestionPage() {
                         factorY={0.08}
                         style={{
                             backgroundImage: `url(${SDOT})`,
-                            backgroundPositionY: "60%",
-                            backgroundPositionX: "-1000%",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "calc(70%) calc(55%)", // 100px hacia abajo del borde superior y centrado horizontalmente
                             transform: "scale(1)",
                             position: "absolute",
                             width: "100%",
@@ -224,14 +222,13 @@ export default function QuestionPage() {
                             filter: `blur(${calculateRightBlur(mousePosition.x, window.innerWidth)})`
                         }}
                     />
-
                     <MouseParallaxChild
                         factorX={0.1}
                         factorY={-0.05}
                         style={{
                             backgroundImage: `url(${Asteroid})`,
-                            backgroundPositionY: "60%",
-                            backgroundPositionX: "-1000%",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "calc(83%) calc(87%)", // 100px hacia abajo del borde superior y centrado horizontalmente
                             transform: "scale(1)",
                             position: "absolute",
                             width: "100%",
@@ -240,7 +237,6 @@ export default function QuestionPage() {
                             filter: `blur(${calculateRightBlur(mousePosition.x, window.innerWidth)})`
                         }}
                     />
-
                     <MouseParallaxChild
                         factorX={-0.01}
                         factorY={-0.01}

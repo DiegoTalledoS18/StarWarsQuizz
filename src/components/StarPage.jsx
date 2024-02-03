@@ -105,7 +105,7 @@ export default function StarPage(){
                         width: "100%",
                         height: "100%",
                         display: "grid",
-                        gridTemplateColumns: ` ${(windowWidth<850) ? "1fr": "1fr 1fr 1fr"}`, // Define tres columnas de igual tamaño
+                        gridTemplateColumns: ` ${(windowWidth<850) ? "1fr": "1fr 1fr 1fr"}`,
                     }}
                     globalFactorX={0.3}
                     globalFactorY={0.3}
@@ -153,11 +153,11 @@ export default function StarPage(){
                     >
                         <Box sx={{
                             width: "100%",
+                            height: "80vh",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
-                            mt: 5,
-                            mb: 5
+                            justifyContent: "center"
                         }}>
                             <Img src={SWLogo} style={{ width: calculateLogoWidth(windowWidth) }} alt="Star Wars Logo" />
                             <Typography variant={calculatePhraseVariant(windowWidth)} component="h1" sx={{ color: "#ffffff", mt: 1 , textAlign: "center"}}>MAY THE FORCE BE WITH YOU</Typography>

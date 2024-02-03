@@ -31,10 +31,6 @@ button {
   transition: box-shadow 0.3s; /* Agregar transición suave para el efecto de iluminación */
 }
 
-button:hover {
-  box-shadow: 0 0 10px rgba(255, 236, 0, 0.7); /* Agregar sombra para el efecto de iluminación en :hover */
-}
-
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

@@ -1,15 +1,48 @@
 import {NavLink, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import {Box, Button, Typography} from "@mui/material";
+import {Box, Button, Grid, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {createQuestion} from "../store/question.d.js"
 import {useQuestionStore} from "../store/questions.js";
+import {MouseParallaxChild, MouseParallaxContainer} from "react-parallax-mouse";
+import Tatooine from "../assets/tatooine.png";
+import Asteroids from "../assets/asteroids.png";
+import Asteroid from "../assets/Asteroid.png";
+import SDOT from "../assets/SDOT.png";
+import TwoSuns from "../assets/two_suns.png";
+import {makeStyles} from "@material-ui/core/styles";
+import StarsBackground from "../assets/stars.png";
+
+const useStyles = makeStyles({
+    root: {
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: "#000000",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+});
 
 export default function QuestionPage() {
+    const classes = useStyles();
     const navigate = useNavigate();
-    const { questionId } = useParams(); // Obtener el questionId de los parámetros de ruta
+    const { questionId } = useParams();
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [answer, setAnswer] = useState(undefined);
     const [question, setQuestion] = useState(createQuestion);
+
+    const handleMouseMove = (event) => {
+        setMousePosition({ x: event.clientX, y: event.clientY });
+    };
+
+    useEffect(() => {
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+        };
+    }, []);
     useEffect(() => {
         if (parseInt(questionId) > 5) {
             navigate('/score');
@@ -35,7 +68,15 @@ export default function QuestionPage() {
 
 
     }, [questionId]);
-
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
     const evaluateAnswer = (index) => {
         if(question.userSelectedAnswer === undefined){
             setAnswer(index);
@@ -79,42 +120,182 @@ export default function QuestionPage() {
         }
 
     }
-    const getLastPage=()=>{
-        if(questionId>1){
-            let pageId=parseInt(questionId)-1
-            return "/question/"+pageId
-        }else{
-            return "/"
-        }
-
-    }
+    const calculateBlur = (yPosition, windowHeight) => {
+        const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
+        const maxBlur = 0.8;
+        const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
+        const blurValue = blurFactor * maxBlur;
+        return `${blurValue}px`;
+    };
+    const calculateLeftBlur = (yPosition, windowHeight) => {
+        const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
+        const maxBlur = 1.5;
+        const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
+        const blurValue = blurFactor * maxBlur;
+        return `${blurValue}px`;
+    };
+    const calculateRightBlur = (yPosition, windowHeight) => {
+        const distanceFromCenter = Math.abs(yPosition - windowHeight +400);
+        const maxBlur = 1.5;
+        const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
+        const blurValue = blurFactor * maxBlur;
+        return `${blurValue}px`;
+    };
     return (
         <>
-            <Typography variant="h4" component="h2" >{questionId}.{question.question}</Typography>
-            <Box sx={{display:"flex",flexDirection:"column"}}>
-                {question.alternatives.map((alternative, index) => (
-                    <Button
-                        key={index}
-                        variant="outlined"
-                        sx={{
-                            cursor: (question.userSelectedAnswer === undefined) ? "pointer" : "default",
-                            color: getButtonColor(index,true),
-                            border: `1px ${getButtonColor(index,false)} solid`,
-                            backgroundColor: getButtonColor(index,false),
-                            mt: 2,
+            <Grid className={classes.root}>
+                <MouseParallaxContainer
+                    className="parallax"
+                    containerStyle={{
+                        width: "100%",
+                        height: "100%",
+                    }}
+                    globalFactorX={0.3}
+                    globalFactorY={0.3}
+                    resetOnLeave
+                >
+                    <MouseParallaxChild
+                        factorX={0.05}
+                        factorY={0.1}
+                        style={{
+                            backgroundImage: `url(${StarsBackground})`,
+                            backgroundPositionY: "50%",
+                            transform: "scale(1.2)",
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            backfaceVisibility: "hidden"
                         }}
-                        onClick={() => evaluateAnswer(index)}
+                    />
+                    <MouseParallaxChild
+                        factorX={0.055}
+                        factorY={0.1}
+                        style={{
+                            backgroundImage: `url(${TwoSuns})`,
+                            backgroundPositionY: "10%",
+                            backgroundPositionX: "-1000%",
+                            transform: "scale(1)",
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            backfaceVisibility: "hidden"
+                        }}
+                    />
+                    <MouseParallaxChild
+                        factorX={0.055}
+                        factorY={0.1}
+                        style={{
+                            backgroundImage: `url(${Tatooine})`,
+                            backgroundPositionY: "60%",
+                            backgroundPositionX: "-1000%",
+                            transform: "scale(1)",
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            backfaceVisibility: "hidden"
+                        }}
+                    />
+                    <MouseParallaxChild
+                        factorX={0.06}
+                        factorY={0.08}
+                        style={{
+                            backgroundImage: `url(${Asteroids})`,
+                            backgroundPositionY: "60%",
+                            backgroundPositionX: "-1000%",
+                            transform: "scale(1)",
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            backfaceVisibility: "hidden"
+                        }}
+                    />
+                    <MouseParallaxChild
+                        factorX={0.08}
+                        factorY={0.08}
+                        style={{
+                            backgroundImage: `url(${SDOT})`,
+                            backgroundPositionY: "60%",
+                            backgroundPositionX: "-1000%",
+                            transform: "scale(1)",
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            backfaceVisibility: "hidden",
+                            filter: `blur(${calculateRightBlur(mousePosition.x, window.innerWidth)})`
+                        }}
+                    />
+
+                    <MouseParallaxChild
+                        factorX={0.1}
+                        factorY={-0.05}
+                        style={{
+                            backgroundImage: `url(${Asteroid})`,
+                            backgroundPositionY: "60%",
+                            backgroundPositionX: "-1000%",
+                            transform: "scale(1)",
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            backfaceVisibility: "hidden",
+                            filter: `blur(${calculateRightBlur(mousePosition.x, window.innerWidth)})`
+                        }}
+                    />
+
+                    <MouseParallaxChild
+                        factorX={-0.01}
+                        factorY={-0.01}
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            height: "100%",
+                            filter: `blur(${calculateBlur(mousePosition.x, window.innerWidth)})`
+                        }}
                     >
-                        {alternative}
-                    </Button>
-                ))}
-            </Box>
-            <Box sx={{display:"flex",justifyContent:"space-between",width:"100%"}}>
-                <Button variant="contained"
-                        sx={{mt:2,width:"100%"}}
-                        disabled={question.userSelectedAnswer === undefined}
-                        onClick={ ()=>getNextPage()}>SIGUIENTE</Button>
-            </Box>
+                        <Box sx={{
+                            width: "100%",
+                            height: "80vh",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center"
+                        }}>
+                            <Typography variant="h4" component="h2" sx={{
+                                color:"white",
+                                display:`${(question.id===0)?"none":"block"}`
+                            }}>{questionId}. {question.question}</Typography>
+                            <Box sx={{width: "50%",display:"flex",flexDirection:"column"}}>
+                                {question.alternatives.map((alternative, index) => (
+                                    <Button
+                                        key={index}
+                                        variant="outlined"
+                                        sx={{
+                                            cursor: (question.userSelectedAnswer === undefined) ? "pointer" : "default",
+                                            color: getButtonColor(index,true),
+                                            border: `1px ${getButtonColor(index,false)} solid`,
+                                            backgroundColor: getButtonColor(index,false),
+                                            mt: 2,
+                                            "&:hover": {
+                                                backgroundColor: getButtonColor(index,false),
+                                            },
+                                        }}
+                                        onClick={() => evaluateAnswer(index)}
+                                    >
+                                        {alternative}
+                                    </Button>
+                                ))}
+                            </Box>
+                            <Box sx={{display:"flex",justifyContent:"center",width:"100%"}}>
+                                <Button variant="contained"
+                                        sx={{mt:2,width:"50%"}}
+                                        disabled={question.userSelectedAnswer === undefined}
+                                        onClick={ ()=>getNextPage()}>SIGUIENTE</Button>
+                            </Box>
+                        </Box>
+                    </MouseParallaxChild>
+                    </MouseParallaxContainer>
+            </Grid>
+
         </>
     );
 }

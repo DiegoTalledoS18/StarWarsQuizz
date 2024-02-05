@@ -86,8 +86,9 @@ export default function ReviewQuestions() {
                             transform: "perspective(500px) rotateX(20deg)",
                             animation: "intro 30s linear infinite",
                             "@keyframes intro": {
-                                from: { transform: "perspective(200px) rotateX(20deg) translateY(800px)" },
-                                to: {  transform: "perspective(200px) rotateX(20deg) translateY(-1000px)",opacity: "0" },
+                                "0%": { transform: "perspective(200px) rotateX(20deg) translateY(570px)" },
+                                "80%": { opacity: "0.95" },
+                                "100%": {  transform: "perspective(200px) rotateX(20deg) translateY(-1000px)",opacity: "0" },
                             },
                         }}>
                             {questions.map((itemQuestion, index) => (

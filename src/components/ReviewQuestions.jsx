@@ -3,12 +3,8 @@ import {Box, Button, Grid, Typography} from "@mui/material";
 import {NavLink} from "react-router-dom";
 import {MouseParallaxChild, MouseParallaxContainer} from "react-parallax-mouse";
 import StarsBackground from "../assets/stars.png";
-import TwoSuns from "../assets/two_suns.png";
-import Tatooine from "../assets/tatooine.png";
-import Asteroids from "../assets/asteroids.png";
-import SDOT from "../assets/SDOT.png";
-import Asteroid from "../assets/Asteroid.png";
 import {makeStyles} from "@material-ui/core/styles";
+import {useEffect, useState} from "react";
 
 const useStyles = makeStyles({
     root: {
@@ -22,6 +18,8 @@ const useStyles = makeStyles({
 });
 
 export default function ReviewQuestions() {
+    const [isButtonVisible, setIsButtonVisible] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const questions = useQuestionStore().questions;
     const getButtonColor = (index,font,question) => {
         if (question.userSelectedAnswer !== undefined) {
@@ -42,6 +40,33 @@ export default function ReviewQuestions() {
         }
 
     }
+    const calculatePhraseVariant = (windowWidth) => {
+        if (windowWidth < 660) {
+            return "h6";
+        } else if (windowWidth < 970) {
+            return "h5";
+        } else {
+            return "h4";
+        }
+    };
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsButtonVisible(true);
+            console.log("30 segs")
+        }, 30000); // 90 segundos
+
+        return () => clearTimeout(timer); // Limpia el temporizador si el componente se desmonta
+    }, []);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
     const classes = useStyles();
     return (
         <>
@@ -74,26 +99,32 @@ export default function ReviewQuestions() {
                         factorY={-0.01}
                         style={{
                             display: "flex",
+                            flexDirection: "column",
                             justifyContent: "center",
+                            alignItems: "center",
+                            width: "100%",
                             height: "100%",
                         }}
                     >
-                        <Box sx={{
-                            width: "50%",
-                            height: "80vh",
-                            display:"flex",
-                            flexDirection:"column",
-                            transform: "perspective(500px) rotateX(20deg)",
-                            animation: "intro 30s linear infinite",
-                            "@keyframes intro": {
-                                "0%": { transform: "perspective(200px) rotateX(20deg) translateY(570px)" },
-                                "80%": { opacity: "0.95" },
-                                "100%": {  transform: "perspective(200px) rotateX(20deg) translateY(-1000px)",opacity: "0" },
-                            },
-                        }}>
+                        <Box
+                            sx={{
+                                width: "50%",
+                                height: "80vh",
+                                display: `${isButtonVisible === true ? "none": "flex"}`,
+                                flexDirection: "column",
+                                transform: "perspective(500px) rotateX(20deg)",
+                                animation: "intro 30s linear infinite",
+                                "@keyframes intro": {
+                                    "0%": { transform: "perspective(200px) rotateX(20deg) translateY(570px)" },
+                                    "80%": { opacity: "0.90" },
+                                    "100%": { transform: "perspective(200px) rotateX(20deg) translateY(-1000px)", opacity: "0"},
+                                },
+
+                            }}
+                        >
                             {questions.map((itemQuestion, index) => (
-                                <Box>
-                                    <Typography variant="h4" component="h2" sx={{color:"white"}} >{itemQuestion.id}.{itemQuestion.question}</Typography>
+                                <Box sx={{textAlign: "center", }}>
+                                    <Typography variant={calculatePhraseVariant(windowWidth)} component="h2" sx={{color:"white"}} >{itemQuestion.id}.{itemQuestion.question}</Typography>
                                     <Box sx={{display:"flex",flexDirection:"column"}}>
                                         {itemQuestion.alternatives.map((alternative, itemQuestionIndex) => (
                                             <Button
@@ -105,6 +136,9 @@ export default function ReviewQuestions() {
                                                     border: `1px ${getButtonColor(itemQuestionIndex,false,itemQuestion)} solid`,
                                                     backgroundColor: getButtonColor(itemQuestionIndex,false,itemQuestion),
                                                     mt: 2,
+                                                    "&:hover": {
+                                                        backgroundColor: getButtonColor(itemQuestionIndex,false,itemQuestion),
+                                                    }
                                                 }}>
                                                 {alternative}
                                             </Button>
@@ -113,12 +147,26 @@ export default function ReviewQuestions() {
 
                                 </Box>
                             ))}
-                            <Box sx={{display:"flex",justifyContent:"center",width:"100%"}}>
-                                <Button variant="contained" sx={{mt:2}}
-                                        component={NavLink}
-                                        to="/score"
-                                >VOLVER</Button>
-                            </Box>
+                        </Box>
+                    </MouseParallaxChild>
+                    <MouseParallaxChild
+                        factorX={-0.01}
+                        factorY={-0.01}
+                        style={{
+                            display: `${isButtonVisible=== false ? "none": "flex"}`,
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width: "100%",
+                            height: "80vh",
+
+                        }}
+                    >
+                        <Box sx={{display:"flex",justifyContent:"center",alignItems: "center" ,width:"100%",}}>
+                            <Button variant="contained" sx={{mt:2}}
+                                    component={NavLink}
+                                    to="/score"
+                            >VOLVER</Button>
                         </Box>
                     </MouseParallaxChild>
                 </MouseParallaxContainer>

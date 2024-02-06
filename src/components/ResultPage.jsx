@@ -4,9 +4,8 @@ import {Box, Button, Grid, styled, Typography} from "@mui/material";
 import {makeStyles} from "@material-ui/core/styles";
 import {MouseParallaxChild, MouseParallaxContainer} from "react-parallax-mouse";
 import StarsBackground from "../assets/stars.png";
-import SD_L from "../assets/sd_1.png";
-import SWLogo from "../assets/SW_LOGO_BLUR.png";
-import SD_R from "../assets/sd_2.png";
+import useSound from 'use-sound';
+import resultSfx from '../assets/results.mp3';
 import {useEffect, useState} from "react";
 const useStyles = makeStyles({
     root: {
@@ -19,6 +18,7 @@ const useStyles = makeStyles({
     },
 });
 export default function ResultPage() {
+    const [play] = useSound(resultSfx);
     const classes = useStyles();
     const finalScore = useQuestionStore.getState().getFinalScore(useQuestionStore.getState());
     const totalOfQuestions = useQuestionStore.getState().questions.length;
@@ -120,6 +120,7 @@ export default function ResultPage() {
                             <Button variant="outlined" sx={{ color: '#F2BC02', border: '1px solid #F2BC02', mt:2}}
                                     component={NavLink}
                                     to="/review"
+                                    onClick={play}
                             >VER RESPUESTAS</Button>
                             <Button variant="outlined" sx={{ color: '#F2BC02', border: '1px solid #F2BC02', mt:2}}
                                     component={NavLink}

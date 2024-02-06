@@ -116,7 +116,7 @@ export default function ReviewQuestions() {
                                 animation: "intro 30s linear infinite",
                                 "@keyframes intro": {
                                     "0%": { transform: "perspective(200px) rotateX(20deg) translateY(570px)" },
-                                    "80%": { opacity: "0.90" },
+                                    "80%": { opacity: "0.80" },
                                     "100%": { transform: "perspective(200px) rotateX(20deg) translateY(-1000px)", opacity: "0"},
                                 },
 

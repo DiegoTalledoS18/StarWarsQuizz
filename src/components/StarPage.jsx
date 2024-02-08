@@ -54,11 +54,16 @@ export default function StarPage(){
     };
 
     const calculateBlur = (yPosition, windowHeight) => {
-        const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
-        const maxBlur = 1.2;
-        const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
-        const blurValue = blurFactor * maxBlur;
-        return `${blurValue}px`;
+        if(windowHeight<450){
+            return "0px"
+        }
+        else {
+            const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
+            const maxBlur = 1.2;
+            const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
+            const blurValue = blurFactor * maxBlur;
+            return `${blurValue}px`;
+        }
     };
     const calculateSDLBlur = (yPosition, windowHeight) => {
         const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
@@ -161,7 +166,7 @@ export default function StarPage(){
                         }}>
                             <Img src={SWLogo} style={{ width: calculateLogoWidth(windowWidth) }} alt="Star Wars Logo" />
                             <Typography variant={calculatePhraseVariant(windowWidth)} component="h1" sx={{ color: "#ffffff", mt: 1 , textAlign: "center"}}>MAY THE FORCE BE WITH YOU</Typography>
-                            <Typography variant={windowWidth<1100 ? "h6": "h5"} sx={{ color: "#FFFFFF", mt: 1, textAlign: "center" }}>By Diego Talledo S.</Typography>
+                            <Typography variant={windowWidth<1100 ? "h6": "h5"} sx={{ color: "#FFFFFF", mt: 1, textAlign: "center" }}>By Diego Talledo Sanchez.</Typography>
                             <Button variant="outlined" sx={{ color: '#ffec00', border: '1px solid #ffec00', mt: 2 }}
                                     component={NavLink}
                                     to="/question/1">INICIAR</Button>

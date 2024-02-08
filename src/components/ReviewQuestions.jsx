@@ -124,7 +124,7 @@ export default function ReviewQuestions() {
                         >
                             {questions.map((itemQuestion, index) => (
                                 <Box sx={{textAlign: "center", }}>
-                                    <Typography variant={calculatePhraseVariant(windowWidth)} component="h2" sx={{color:"white"}} >{itemQuestion.id}.{itemQuestion.question}</Typography>
+                                    <Typography variant={calculatePhraseVariant(windowWidth)} component="h2" sx={{color:"white",mt:2}} >{itemQuestion.id}.{itemQuestion.question}</Typography>
                                     <Box sx={{display:"flex",flexDirection:"column"}}>
                                         {itemQuestion.alternatives.map((alternative, itemQuestionIndex) => (
                                             <Button

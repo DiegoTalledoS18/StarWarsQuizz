@@ -7,28 +7,6 @@ import ReviewQuestions from "./components/ReviewQuestions";
 
 import "./App.css"
 function App() {
-    useEffect(() => {
-        const music = new Audio('./assets/results.mp3');
-
-        const handleRouteChange = () => {
-            if (window.location.pathname === "/review" && music.paused) {
-                music.play().then(() => {
-                    // Aquí puedes realizar acciones adicionales después de que la música comience a reproducirse
-                    console.log("La música ha comenzado a reproducirse");
-                });
-            } else if (window.location.pathname !== "/review") {
-                music.pause();
-            }
-        };
-
-        window.addEventListener("popstate", handleRouteChange);
-
-        return () => {
-            window.removeEventListener("popstate", handleRouteChange);
-            music.pause();
-        };
-    }, []);
-
     return (
         <>
             <Routes>

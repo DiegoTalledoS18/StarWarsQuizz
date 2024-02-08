@@ -29,6 +29,7 @@ export default function QuestionPage() {
     const classes = useStyles();
     const navigate = useNavigate();
     const { questionId } = useParams();
+    const [totalOfQuestions, setTotalOfQuestions] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [answer, setAnswer] = useState(undefined);
@@ -40,34 +41,49 @@ export default function QuestionPage() {
     };
 
     useEffect(() => {
+        const fetchQuestions = async () => {
+            try {
+                const response = await fetch(`https://my-json-server.typicode.com/DiegoTalledoS18/StarWarsQuizzJson/questions/`);
+                if (!response.ok) {
+                    throw new Error('No se pudo obtener la pregunta');
+                }
+                const data = await response.json();
+                return data.length; // Aquí obtén la longitud de los datos
+            } catch (error) {
+                console.error('Error al obtener las preguntas:', error);
+                return 0; // Si ocurre un error, devolvemos 0
+            }
+        };
+
+        fetchQuestions().then(length => {
+           setTotalOfQuestions(length)
+        });
+    }, []);
+
+
+    useEffect(() => {
         window.addEventListener("mousemove", handleMouseMove);
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
         };
     }, []);
     useEffect(() => {
-        if (parseInt(questionId) > 5) {
-            navigate('/score');
-
-        }else{
-            const fetchQuestion = async () => {
-                try {
-                    const response = await fetch(`https://my-json-server.typicode.com/DiegoTalledoS18/StarWarsQuizzJson/questions/${questionId}`);
-                    if (!response.ok) {
-                        throw new Error('No se pudo obtener la pregunta');
-                    }
-                    const data = await response.json();
-                    return data;
-                } catch (error) {
-                    return error;
+        const fetchQuestion = async () => {
+            try {
+                const response = await fetch(`https://my-json-server.typicode.com/DiegoTalledoS18/StarWarsQuizzJson/questions/${questionId}`);
+                if (!response.ok) {
+                    throw new Error('No se pudo obtener la pregunta');
                 }
-            };
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                return error;
+            }
+        };
 
-            fetchQuestion().then(r => {
-                setQuestion(r);
-            }); // Llamar a la función de fetch cuando cambie questionId
-        }
-
+        fetchQuestion().then(r => {
+            setQuestion(r);
+        }); // Llamar a la función de fetch cuando cambie questionId
 
     }, [questionId]);
     useEffect(() => {
@@ -100,8 +116,15 @@ export default function QuestionPage() {
         if(question.userSelectedAnswer !== undefined){
             useQuestionStore.getState().addQuestion(question)
             let pageId=parseInt(questionId)+1
-            navigate("/question/"+pageId);
+            if (parseInt(questionId) >= totalOfQuestions) {
+                navigate('/score');
+
+            }else{
+                navigate("/question/"+pageId);
+            }
         }
+
+
     }
     const getButtonColor = (index,font,windowHeight,background) => {
         if(background && windowHeight<=1050 && question.userSelectedAnswer === undefined){
@@ -129,11 +152,16 @@ export default function QuestionPage() {
 
     }
     const calculateBlur = (yPosition, windowHeight) => {
-        const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
-        const maxBlur = 0.8;
-        const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
-        const blurValue = blurFactor * maxBlur;
-        return `${blurValue}px`;
+        if(windowHeight<450){
+            return "0px"
+        }else {
+            const distanceFromCenter = Math.abs(yPosition - windowHeight / 2);
+            const maxBlur = 0.8;
+            const blurFactor = Math.min(distanceFromCenter / (windowHeight / 2), 1);
+            const blurValue = blurFactor * maxBlur;
+            return `${blurValue}px`;
+        }
+
     };
     const calculateLeftBlur = (yPosition, windowHeight) => {
         const distanceFromCenter = Math.abs(yPosition - windowHeight / 6);
